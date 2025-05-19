@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, LogOut, User } from "lucide-react";
 
 const mentors = [
@@ -28,7 +28,13 @@ const mentors = [
 const Mentorship = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
   const filteredMentors = mentors.filter(
     (mentor) =>
       mentor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -69,7 +75,10 @@ const Mentorship = () => {
           </nav>
         </div>
         {/* Logout Button */}
-        <button className="absolute bottom-6 left-6 flex items-center gap-2 text-white hover:text-[#C3BABA] transition">
+        <button
+          onClick={handleLogout}
+          className="absolute bottom-6 left-6 flex items-center gap-2 text-white hover:text-[#C3BABA] transition"
+        >
           <LogOut size={20} />
           {isSidebarOpen && <span>Logout</span>}
         </button>

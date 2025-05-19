@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Menu,
   X,
@@ -21,6 +21,14 @@ const applications = [
 const Applications = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [filter, setFilter] = useState("All");
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
 
   const filteredApps =
     filter === "All"
@@ -59,7 +67,10 @@ const Applications = () => {
             {isSidebarOpen && <span>Funding</span>}
           </Link>
         </nav>
-        <button className="flex items-center gap-2 text-white hover:text-[#C3BABA] transition absolute bottom-6">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-white hover:text-[#C3BABA] transition absolute bottom-6"
+        >
           <LogOut size={20} />
           {isSidebarOpen && <span>Logout</span>}
         </button>

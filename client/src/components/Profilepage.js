@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, User, Key, LogOut } from "lucide-react";
+import axios from "axios";
 
 const Profilepage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -12,6 +13,21 @@ const Profilepage = () => {
     bio: "Passionate entrepreneur looking to scale innovative ideas.",
     profilePic: "https://via.placeholder.com/100",
   });
+
+  useEffect(() => {
+    getUser();
+  });
+
+  const getUser = async () => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get("http://localhost:5000/api/users/getuser", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(res);
+  };
 
   const [tempProfileData, setTempProfileData] = useState(profileData);
 
@@ -32,19 +48,49 @@ const Profilepage = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handlePasswordChange = () => {
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
+  const handlePasswordChange = async () => {
     if (!passwordData.newPassword || !passwordData.confirmPassword) {
       setError("All fields are required");
       return;
     }
+
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-    setError("");
-    setIsPasswordModalOpen(false);
-    setIsSuccessModalOpen(true);
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.put(
+        "http://localhost:5000/api/users/change-password",
+        { newPassword: passwordData.newPassword },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setError("");
+      setIsPasswordModalOpen(false);
+      setIsSuccessModalOpen(true);
+    } catch (err) {
+      console.error("Error changing password:", err);
+      const message =
+        err.response?.data?.message ||
+        "Something went wrong. Please try again.";
+      setError(message);
+    }
   };
 
   return (
@@ -83,7 +129,10 @@ const Profilepage = () => {
               {isSidebarOpen && <span>Change Password</span>}
             </button>
           </nav>
-          <button className="flex items-center gap-2 text-white hover:text-[#C3BABA] transition absolute bottom-6">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 text-white hover:text-[#C3BABA] transition absolute bottom-6"
+          >
             <LogOut size={20} />
             {isSidebarOpen && <span>Logout</span>}
           </button>

@@ -8,6 +8,7 @@ import Mentorship from "./components/Mentorship";
 import Community from "./components/Community";
 import FundingSubpage from "./components/FundingSubpage";
 import Applications from "./components/Applications";
+import PrivateRoute from "./components/PrivateRoute"; // ✅ Import it
 
 function App() {
   return (
@@ -15,13 +16,64 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/login" element={<Loginpage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<Profilepage />} />
-        <Route path="/funding" element={<Funding />} />
-        <Route path="/mentors" element={<Mentorship />} />
-        <Route path="/community" element={<Community />} />
-        <Route path="/fundingsub" element={<FundingSubpage />} />
-        <Route path="/applications" element={<Applications />} />
+
+        {/* ✅ Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profilepage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/funding"
+          element={
+            <PrivateRoute>
+              <Funding />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/mentors"
+          element={
+            <PrivateRoute>
+              <Mentorship />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/community"
+          element={
+            <PrivateRoute>
+              <Community />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/fundingsub"
+          element={
+            <PrivateRoute>
+              <FundingSubpage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/applications"
+          element={
+            <PrivateRoute>
+              <Applications />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );

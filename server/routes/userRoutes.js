@@ -1,9 +1,16 @@
 import express from "express";
-import { changePassword, editProfile } from "../controllers/userController.js";
-import authMiddleware from "../middlewares/authMiddleware.js";
+import {
+  changePassword,
+  editProfile,
+  getUser,
+} from "../controllers/userController.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 import upload from "../middlewares/multer.js";
 
 const router = express.Router();
+
+//get user route
+router.get("/getuser", authMiddleware, getUser);
 
 // Change Password Route
 router.put("/change-password", authMiddleware, changePassword);

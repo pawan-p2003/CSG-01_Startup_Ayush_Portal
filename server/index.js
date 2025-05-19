@@ -5,12 +5,15 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import fundingRoutes from "./routes/funding.js";
 import mentorRoutes from "./routes/mentor.js";
+import { router as verifyRoute } from "./middlewares/authMiddleware.js";
+import cors from "cors";
 
 const app = express();
 dotenv.config();
 
 //middlewares
 app.use(express.json());
+app.use(cors({ origin: "*", credentials: true }));
 
 const PORT = process.env.PORT || 6000;
 
@@ -36,6 +39,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/funding", fundingRoutes);
 app.use("/api/mentors", mentorRoutes);
+app.use("/api/token/", verifyRoute);
 
 app.listen(PORT, () => {
   connect();

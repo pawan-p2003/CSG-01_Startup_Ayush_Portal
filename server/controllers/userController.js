@@ -4,14 +4,14 @@ import bcrypt from "bcryptjs";
 //change password
 export const changePassword = async (req, res) => {
   try {
-    const newPassword = req.body;
+    const { newPassword } = req.body;
     const user = await User.findById(req.user.id);
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Hash new password and save
     const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword.toString(), salt);
+    user.password = await bcrypt.hash(newPassword, salt);
     await user.save();
 
     res.status(200).json({ message: "Password changed successfully" });
@@ -79,4 +79,9 @@ export const editProfile = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
+};
+
+export const getUser = (req, res) => {
+  const userDoc = User.findById(req.user.id).select("-password").lean();
+  console.log(userDoc.username);
 };

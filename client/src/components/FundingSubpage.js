@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Menu,
   X,
@@ -33,6 +33,13 @@ const FundingSubpage = () => {
   const [eligibility, setEligibility] = useState("");
   const [status, setStatus] = useState("Application Pending");
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
   return (
     <div className="min-h-screen flex bg-[#E9E3E6]">
       {/* Sidebar */}
@@ -69,7 +76,10 @@ const FundingSubpage = () => {
               <DollarSign />
               {isSidebarOpen && <span>Funding</span>}
             </Link>
-            <button className="flex items-center space-x-2 hover:text-[#C3BABA] transition">
+            <button
+              onClick={handleLogout}
+              className="flex items-center space-x-2 hover:text-[#C3BABA] transition"
+            >
               <LogOut size={20} />
               {isSidebarOpen && <span>Logout</span>}
             </button>

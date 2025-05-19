@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, LogOut, Users } from "lucide-react";
 
 const Community = () => {
@@ -13,6 +13,14 @@ const Community = () => {
     { title: "📈 Market research techniques for entrepreneurs." },
     { title: "🛠️ Tools every startup should use." },
   ];
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
 
   return (
     <div className="min-h-screen flex bg-[#E9E3E6]">
@@ -46,7 +54,10 @@ const Community = () => {
               {isSidebarOpen && <span>Dashboard</span>}
             </Link>
           </nav>
-          <button className="flex items-center gap-2 text-white hover:text-[#C3BABA] transition mt-4">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 text-white hover:text-[#C3BABA] transition mt-4"
+          >
             <LogOut size={20} />
             {isSidebarOpen && <span>Logout</span>}
           </button>

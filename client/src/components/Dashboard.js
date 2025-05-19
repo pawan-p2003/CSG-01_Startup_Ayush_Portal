@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Menu,
   X,
@@ -8,10 +8,17 @@ import {
   Users,
   MessageSquare,
   LogOut,
-} from "lucide-react"; // Icons
+} from "lucide-react";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
 
   return (
     <div className="min-h-screen flex bg-[#E9E3E6]">
@@ -23,7 +30,7 @@ const Dashboard = () => {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
-        {/* Top Section (Title + Toggle Button) */}
+        {/* Top Section */}
         <div>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -32,7 +39,6 @@ const Dashboard = () => {
             {isSidebarOpen ? <X /> : <Menu />}
           </button>
 
-          {/* Mobile Close Button */}
           <button
             onClick={() => setIsSidebarOpen(false)}
             className="md:hidden absolute top-4 right-4 text-white text-2xl"
@@ -40,12 +46,12 @@ const Dashboard = () => {
             ✖
           </button>
 
-          {/* Sidebar Content */}
           <h2
             className={`text-2xl font-bold mt-8 ${!isSidebarOpen && "hidden"}`}
           >
             Dashboard
           </h2>
+
           <nav className="mt-6 flex flex-col space-y-4">
             <Link
               to="/profile"
@@ -78,8 +84,11 @@ const Dashboard = () => {
           </nav>
         </div>
 
-        {/* Logout Button at Bottom */}
-        <button className="flex items-center gap-2 text-white hover:text-[#C3BABA] transition mt-auto">
+        {/* ✅ Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-white hover:text-[#C3BABA] transition mt-auto"
+        >
           <LogOut size={20} />
           {isSidebarOpen && <span>Log Out</span>}
         </button>
@@ -87,7 +96,6 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <main className="flex-1 p-8">
-        {/* Menu Button (Mobile) */}
         <button
           onClick={() => setIsSidebarOpen(true)}
           className="md:hidden text-[#736F72] text-3xl"
@@ -95,13 +103,11 @@ const Dashboard = () => {
           <Menu />
         </button>
 
-        {/* Welcome Banner */}
         <div className="bg-[#C3BABA] p-6 rounded-xl shadow-md text-white mt-4">
           <h1 className="text-3xl font-bold">Welcome, Founder!</h1>
           <p className="mt-2">Let’s scale your startup 🚀</p>
         </div>
 
-        {/* Quick Stats */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {
@@ -122,7 +128,6 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* Recent Activity */}
         <div className="mt-8 bg-white p-6 rounded-xl shadow-md">
           <h2 className="text-xl font-semibold text-[#736F72]">
             Recent Activity

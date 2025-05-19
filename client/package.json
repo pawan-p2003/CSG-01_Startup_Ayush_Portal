@@ -10,6 +10,7 @@
     "ajv": "^8.17.1",
     "ajv-keywords": "^5.1.0",
     "autoprefixer": "^10.4.21",
+    "axios": "^1.8.4",
     "lucide-react": "^0.482.0",
     "postcss": "^8.5.3",
     "react": "^19.0.0",

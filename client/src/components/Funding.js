@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Menu,
   X,
@@ -12,7 +12,13 @@ import {
 
 const Funding = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
   return (
     <div className="min-h-screen flex bg-[#E9E3E6]">
       {/* Sidebar */}
@@ -55,7 +61,10 @@ const Funding = () => {
               {isSidebarOpen && <span>Applications</span>}
             </Link>
           </nav>
-          <button className="flex items-center gap-2 text-white hover:text-[#C3BABA] transition mb-6">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 text-white hover:text-[#C3BABA] transition mb-6"
+          >
             <LogOut size={20} />
             {isSidebarOpen && <span>Log Out</span>}
           </button>
